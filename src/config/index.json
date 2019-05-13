@@ -1,0 +1,7 @@
+{
+    "secret": "dynamicYeildTest",
+    "refreshTokenSecret": "dynamicYeildTestByRotemLevi",
+    "port": 3000,
+    "tokenLife": 24,
+    "refreshTokenLife": 86400
+}

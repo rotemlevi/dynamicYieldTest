@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <style type="text/css">
+        html {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .container {
+            margin: 0 auto;
+            width: 90%;
+        }
+
+        hr {
+            height: 1.5px;
+            background-color: black;
+        }
+
+        .header .logo {
+            height: 20%;
+            width: 20%;
+        }
+
+        .body {
+            margin-top: 10%;
+        }
+    </style>
+    <script type="text/javascript">
+        function setCookie(key, value, expires) {
+            expires = new Date(expires) || new Date(defaultExpires);
+            document.cookie = key + '=' + value + ';path=/' + ';expires=' + expires.toUTCString();
+        }
+
+        function removeCookie(key) {
+            setCookie(key, "", new Date());
+        }
+
+        $(document).ready(function () {
+            $("#logout").click(function () {
+                removeCookie("token");
+                localStorage.removeItem('refreshToken');
+                event.preventDefault();
+                window.location.reload();
+            });
+
+            $.get("../api/users")
+                .done(function (users) {
+                    var cList = $('ul.mylist');
+                    cList.html("");
+                    $.each(users, function (i, email) {
+                        var li = $('<li/>')
+                            .addClass('ui-menu-item')
+                            .attr('role', 'menuitem')
+                            .appendTo(cList);
+                        var a = $('<a/>')
+                            .addClass('ui-all')
+                            .text(email)
+                            .appendTo(li);
+                    });
+                });
+        });
+    </script>
+</head>
+
+<body>
+    <section class="container">
+        <div class="header"><img class="logo" h
+                src="https://www.linkedin.com/media-proxy/ext?w=1200&h=628&hash=eRHHitsQnb36DkOmWRbXn2iSq5Y%3D&ora=1%2CaFBCTXdkRmpGL2lvQUFBPQ%2CxAVta5g-0R6nlh8Tw1It6a2FowGz60oISIfYC2G8G2f1spyfNT-tdoDSeLChpEtOdSoDmBJkcrG-GGGiSp7gK_OQepUV7pa_cOXmbigOeigDsn8c1usZPDhh5rDgCvnxPX8LgM9ZSw2eB4HtbGAyGgIbr-CfHLL-C20gnASvVfnXDc0QWfoywtcDy39NktXCIdxqyaND2mRonQqJ6J3ZYhA4z4yUBmikDQMlM3PlFs9LqpWI-TSilQPIwmuGjYqZEoiuIbctzEeM5MjrJDG10FFvvXQjwSVP09l8EUvYpvsV422WbucmeTfSv9ax">
+            <hr>
+        </div>
+        <div class="body">
+            <h1>Users:</h1>
+            <ul class="mylist"></ul>
+            <button id="logout">logout</button>
+        </div>
+
+    </section>
+</body>
+
+</html>

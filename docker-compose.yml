@@ -1,0 +1,37 @@
+version: "3"
+
+volumes:
+  redis:
+    driver: "local"
+  mongo:
+    driver: "local"
+
+services:
+  mongo:
+    image: mongo:latest
+    volumes:
+      - './data:/data/db'
+    ports:
+      - '27017:27017'
+  
+  redis:
+    image: redis:latest
+    volumes:
+      - redis:/data
+    ports:
+      - 6379:6379
+
+  node:
+    restart: always
+    build:
+      context: ./
+    volumes:
+      - ./:/project/node-test-server
+    ports:
+      - 3000:3000
+      - 9229:9229
+    links:
+      - redis
+      - mongo
+    command:
+        sh -c 'npm i && npm start'
