@@ -11,8 +11,8 @@ router.use(express.urlencoded({
 router.use(cookieParser());
 router.use(publicAccess);
 // App routes
-router.get('/login', (req, res) => res.render("login", { module: { user: { authenticated: Object.keys(req.decoded).length > 0, authorized: req.decoded && req.decoded.authorized, mail: req.decoded && req.decoded.mail } } }));
-router.get('/login.html', (req, res) => res.render("login", { module: { user: { authorized: req.decoded && req.decoded.authorized, mail: req.decoded && req.decoded.mail } } }));
+router.get('/login', (req, res) => res.render("login", { module: { user: { authenticated: !!req.decoded, authorized: req.decoded && req.decoded.authorized, mail: req.decoded && req.decoded.mail } } }));
+router.get('/login.html', (req, res) => res.render("login", { module: { user: { authenticated: !!req.decoded, authorized: req.decoded && req.decoded.authorized, mail: req.decoded && req.decoded.mail } } }));
 router.get('/register', (req, res) => res.render("register"));
 router.get('/register.html', (req, res) => res.render("register"));
 module.exports = router;

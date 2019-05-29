@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser');
 const { BaseError, UserAlreadyExistError, MissingRefreshTokenError, InvalidCredentialsError, UknownError } = require('../entities/errors');
 const { FailedToActivateUser, FailedToLoginError, FailedToLogoutError, FailedToSendActivationMailError, FailedToRegisterError, FailedToRefreshTokenError, FailedToGenerateToken } = require('../entities/errors');
 const { MongoError } = require('mongodb');
-
+const { jsStringEscape } = require('../utils');
 router.use(express.json());
 router.use(express.urlencoded({
     extended: false
@@ -25,7 +25,8 @@ async function generateTokens(host, email, password, authorized, withRefreshToke
             "id": jwt.generateUniqueId(), //so this token can be black list (revoke)
             "email": email,
             "password": password,
-            "authorized": authorized
+            "authorized": authorized,
+            "type": activationToken ? "activation" : "authentication"
         }
         const refreshToken = withRefreshToken ? jwt.generateRefreshToken(host) : null;
         const token = activationToken ? jwt.generateActivationToken(payload) : jwt.generateToken(payload);
@@ -140,7 +141,7 @@ router.get('/authorized/:token', apiAuthentication, async (req, res, next) => {
         });
         const { token } = await login(req.get('host'), req.decoded.email, req.destroy.password, false);
         res.cookie('token', token.value, { expire: token.expiration });
-        res.redirect(302, `${req.get("host")}/app/index.html`);
+        res.render("redirect", { location: `http://${req.get("host")}/app/index.html` }); //safer to redirect from email
     } catch (err) {
         if (err instanceof BaseError) return next(err);
         else return next(new FailedToActivateUser("failed to activate user", 500, err));

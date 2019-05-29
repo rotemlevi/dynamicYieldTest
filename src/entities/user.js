@@ -34,8 +34,10 @@ module.exports = {
         let hashPassword = crypto.createHash('md5').update(user.password).digest("hex");
         const query = { "email": user.email, "password": hashPassword };
         const userObj = {
-            "email": user.email, "password": hashPassword, "authorized": user.authorized
+            $set: { "email": user.email, "password": hashPassword, "authorized": user.authorized }
         }
+
+
         return await collection.updateOne(query, userObj);
     },
     getUserAsync: async (email) => {
