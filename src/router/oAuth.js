@@ -13,9 +13,7 @@ const { FailedToActivateUser, FailedToLoginError, FailedToLogoutError, FailedToS
 const { MongoError } = require('mongodb');
 
 router.use(express.json());
-router.use(express.urlencoded({
-    extended: false
-}));
+router.use(express.urlencoded({ extended: false }));
 router.use(cookieParser());
 
 async function generateTokens(host, email, password, authorized, withRefreshToken, activationToken = false) {
@@ -71,6 +69,7 @@ async function login(host, email, password, validateUser) {
 
 }
 
+//routes
 router.post('/logout', async (req, res, next) => {
     try {
         const body = req.body

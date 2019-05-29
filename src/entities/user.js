@@ -15,7 +15,6 @@ async function init() {
     } catch (err) {
         console.log(err);
     }
-
 }
 
 module.exports = {
