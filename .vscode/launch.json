@@ -6,18 +6,20 @@
     "configurations": [
         {
             "type": "node",
-            "request": "attach",
-            "name": "Attach to Remote",
-            "address": "TCP/IP address of process to be debugged",
-            "port": 9229,
-            "localRoot": "${workspaceFolder}",
-            "remoteRoot": "Absolute path to the remote directory containing the program"
-        },
-        {
-            "type": "node",
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}\\server.js"
+        },
+        {
+            "name": "Docker: Attach to Node",
+            "type": "node",
+            "request": "attach",
+            "port": 9229,
+            "address": "localhost",
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/usr/src/app",
+            "protocol": "inspector",
+            "restart": true
         }
     ]
 }

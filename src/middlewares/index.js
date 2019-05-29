@@ -1,6 +1,8 @@
 module.exports = {
   exceptionHandler: require('./exceptionHandler'),
-  authenticator: require('./authenticator'),
-  apiAuthenticator: require('./apiAuthenticator'),
-  authAuthenticator: require('./authAuthenticator'),
+  appAuthentication: require('./appAuthentication'),
+  apiAuthentication: require('./apiAuthentication'),
+  appAuthorization: require('./appAuthorization'),
+  apiAuthorization: require('./apiAuthorization'),
+  publicAccess: require('./publicAccess'),
 };

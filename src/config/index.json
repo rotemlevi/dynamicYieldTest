@@ -2,6 +2,7 @@
     "secret": "dynamicYeildTest",
     "refreshTokenSecret": "dynamicYeildTestByRotemLevi",
     "port": 3000,
+    "activationTokenLife": 1,
     "tokenLife": 24,
     "refreshTokenLife": 86400
 }

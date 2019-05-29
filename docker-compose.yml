@@ -8,12 +8,15 @@ volumes:
 
 services:
   mongo:
+    #restart: on-failure:10
     image: mongo:latest
+    #tty: true
     volumes:
-      - './data:/data/db'
+      - './mongo:/data/db'
     ports:
       - '27017:27017'
-  
+    
+#mongod --repair && mongod && 
   redis:
     image: redis:latest
     volumes:
@@ -33,5 +36,8 @@ services:
     links:
       - redis
       - mongo
+    depends_on:
+      - mongo
+      - redis
     command:
-        sh -c 'npm i && npm start'
+        sh -c 'npm i && npm run-script debug'

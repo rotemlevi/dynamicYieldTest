@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint src/**/* server.js",
     "test": "mocha --timeout 10000",
-    "start": "node ./server.js"
+    "start": "node ./server.js",
+    "debug": "node --inspect=0.0.0.0 server.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.2.4",
+    "nodemailer": "^6.2.1",
     "redis": "^2.8.0",
     "uuid": "^3.3.2",
     "winston": "^3.2.1"

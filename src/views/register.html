@@ -903,29 +903,17 @@
         }
 
         $(document).ready(function () {
-
             $("#register").click(function () {
                 var email = $('#email').val();
                 var password = $('#password').val();
                 var error = $('#error');
                 error.removeClass("visible");
-                $.post("../oauth/register", {
-                        email: email,
-                        password: password
-                    }, "json")
+                $.post("../oauth/register", { email: email, password: password }, "json")
                     .done(function (res) {
-                        if (res.err) {
-                            error.addClass("visible");
-                            error.val(res.msg);
-                            return;
-                        }
-                        setCookie("token", res.token.value, res.token.expiration);
-                        localStorage.setItem('refreshToken', res.refreshToken);
-                        window.location.href = "../app/";
-
+                        window.location.href = "./login/";
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         error.addClass("visible");
-                        error.text(jqXHR.responseText);
+                        error.text(jqXHR.responseJSON.msg);
                     });
                 event.preventDefault();
             });

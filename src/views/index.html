@@ -31,6 +31,12 @@
         }
     </style>
     <script type="text/javascript">
+
+        function getCookie(key) {
+            var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+            return keyValue ? keyValue[2] : null;
+        }
+
         function setCookie(key, value, expires) {
             expires = new Date(expires) || new Date(defaultExpires);
             document.cookie = key + '=' + value + ';path=/' + ';expires=' + expires.toUTCString();
@@ -40,12 +46,35 @@
             setCookie(key, "", new Date());
         }
 
+        function refreshExpiredToken() {
+            //if token expired then refresh the token with the refresh token.
+            var tokenFromCookie = getCookie("token");
+            if (!tokenFromCookie) {
+                var refreshToken = localStorage.getItem('refreshToken');
+                if (refreshToken) {
+                    $.post("../oAuth/token", {
+                        refreshToken: refreshToken
+                    }, "json").then(function (res) {
+                        setCookie("token", res.token.value, res.token.expiration);
+                        window.location.reload();
+                    });
+                }
+            }
+        }
+
         $(document).ready(function () {
+            refreshExpiredToken();
+
             $("#logout").click(function () {
-                removeCookie("token");
-                localStorage.removeItem('refreshToken');
+                var refreshToken = localStorage.getItem('refreshToken');
+                $.post("../oAuth/logout", {
+                    refreshToken: refreshToken
+                }).always(function () {
+                    removeCookie("token");
+                    localStorage.removeItem('refreshToken');
+                    window.location.reload();
+                });
                 event.preventDefault();
-                window.location.reload();
             });
 
             $.get("../api/users")
@@ -62,6 +91,8 @@
                             .text(email)
                             .appendTo(li);
                     });
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status === 401) refreshExpiredToken(); //token was expired                    
                 });
         });
     </script>

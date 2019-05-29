@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const config = require('../config')
-const uuid = require('uuid');
-
+const uuidV3 = require('uuid/v3');
+const uuidV1 = require('uuid/v1');
 
 module.exports = {
     ...jwt,
@@ -9,13 +9,28 @@ module.exports = {
         return jwt.verify(token, secret || config.secret);
     },
     generateToken: (user, secret, tokenLife) => {
-        let expiration = (new Date()).setHours(new Date().getHours() + config.tokenLife);
-
-        return jwt.sign(user, secret || config.secret, {
-            expiresIn: tokenLife || expiration
-        });
+        const expiration = (new Date()).setHours(new Date().getHours() + config.tokenLife) || tokenLife;
+        return {
+            value: jwt.sign(user, secret || config.secret, {
+                expiresIn: expiration
+            }),
+            expiration
+        }
     },
-    generateRefreshToken: () => {
-        return uuid.v1();
+    generateActivationToken: (user, secret, tokenLife) => {
+        const expiration = (new Date()).setHours(new Date().getHours() + config.activationTokenLife) || tokenLife;
+        return {
+            value: jwt.sign(user, secret || config.secret, {
+                expiresIn: expiration
+            }),
+            expiration
+        }
+    },
+    generateRefreshToken: (host) => {
+        return uuidV3(host, uuidV3.DNS);
+    },
+    generateUniqueId: () => {
+        return uuidV1();
     }
+
 };

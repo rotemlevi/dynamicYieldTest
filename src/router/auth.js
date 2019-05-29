@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cookieParser = require('cookie-parser');
-const {authAuthenticator, exceptionHandler} = require('../middlewares');
+const { publicAccess } = require('../middlewares');
 
 router.use(express.json());
 router.use(express.urlencoded({
@@ -9,16 +9,10 @@ router.use(express.urlencoded({
 }));
 
 router.use(cookieParser());
-router.use(authAuthenticator);
-router.use(exceptionHandler);
-
+router.use(publicAccess);
 // App routes
-router.get('/login', (req, res) => res.redirect('/auth/login.html'));
-router.get('/login.html', (req, res) => {
-    return res.render("login");
-});
-router.get('/register', (req, res) => res.redirect('/auth/register.html'));
-router.get('/register.html', (req, res) => {
-    return res.render("register");
-});
+router.get('/login', (req, res) => res.render("login", { module: { user: { authenticated: Object.keys(req.decoded).length > 0, authorized: req.decoded && req.decoded.authorized, mail: req.decoded && req.decoded.mail } } }));
+router.get('/login.html', (req, res) => res.render("login", { module: { user: { authorized: req.decoded && req.decoded.authorized, mail: req.decoded && req.decoded.mail } } }));
+router.get('/register', (req, res) => res.render("register"));
+router.get('/register.html', (req, res) => res.render("register"));
 module.exports = router;

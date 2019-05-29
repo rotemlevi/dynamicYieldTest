@@ -1,24 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const Logger = require('../logger/log');
 const cookieParser = require('cookie-parser');
-const {
-    authenticator,
-    exceptionHandler
-} = require('../middlewares');
+const { appAuthentication, appAuthorization } = require('../middlewares');
 
 router.use(express.json());
-router.use(express.urlencoded({
-    extended: false
-}));
+router.use(express.urlencoded({ extended: false }));
 router.use(cookieParser());
-router.use(authenticator);
-router.use(exceptionHandler);
+router.use(appAuthentication);
+router.use(appAuthorization);
 
 // App routes
-router.get('/', (req, res) => res.redirect('/app/index.html'));
-router.get('/index.html', (req, res) => {
-    return res.render("index");
-});
+router.get('/', (req, res) => res.render("index"));
+router.get('/index.html', (req, res) => res.render("index"));
 
 module.exports = router;
