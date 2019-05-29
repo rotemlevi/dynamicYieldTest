@@ -9,8 +9,9 @@ router.use(cookieParser());
 router.use(appAuthentication);
 router.use(appAuthorization);
 
+const index = (req, res) => res.render("index");
 // App routes
-router.get('/', (req, res) => res.render("index"));
-router.get('/index.html', (req, res) => res.render("index"));
+router.get('/', index);
+router.get('/index.html', index);
 
 module.exports = router;
