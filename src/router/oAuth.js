@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const redisClient = require('../dal/redis');
 const crypto = require('crypto');
-const { apiAuthentication, apiAuthorization } = require('../middlewares');
+const { apiAuthentication } = require('../middlewares');
 const config = require('../config');
 const userCollection = require('../entities/user');
 const jwt = require('../jwt');
@@ -11,13 +11,12 @@ const cookieParser = require('cookie-parser');
 const { BaseError, UserAlreadyExistError, MissingRefreshTokenError, InvalidCredentialsError, UknownError } = require('../entities/errors');
 const { FailedToActivateUser, FailedToLoginError, FailedToLogoutError, FailedToSendActivationMailError, FailedToRegisterError, FailedToRefreshTokenError, FailedToGenerateToken } = require('../entities/errors');
 const { MongoError } = require('mongodb');
-const { jsStringEscape } = require('../utils');
+
 router.use(express.json());
 router.use(express.urlencoded({
     extended: false
 }));
 router.use(cookieParser());
-//router.use(exceptionHandler);
 
 async function generateTokens(host, email, password, authorized, withRefreshToken, activationToken = false) {
     try {
