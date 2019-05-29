@@ -36,7 +36,7 @@ module.exports = {
         const userObj = {
             "email": user.email, "password": hashPassword, "authorized": user.authorized
         }
-        return await collection.update(query, userObj);
+        return await collection.updateOne(query, userObj);
     },
     getUserAsync: async (email) => {
         if (collection === null) await init();
